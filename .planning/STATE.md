@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 01-05-PLAN.md (session management hooks, UI components, API routes)
-last_updated: "2026-03-15T20:40:48Z"
-last_activity: 2026-03-15 — Executed plan 01-05 (WakeLock, visibility guard, session lifecycle, ConsentModal, MicIndicator, SessionTimer, SessionControls, StatusBanner, 3 API routes)
+stopped_at: Completed 01-06-PLAN.md (page wiring — complete session flow)
+last_updated: "2026-03-15T21:21:27Z"
+last_activity: 2026-03-15 — Executed plan 01-06; wired all hooks and components into home, active, and recovery pages; 10 new integration tests, all 63 tests passing, build clean
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 5
-  percent: 18
+  completed_plans: 6
+  percent: 21
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 5 of 7 in current phase (01-05 complete)
+Plan: 6 of 7 in current phase (01-06 complete)
 Status: In progress
-Last activity: 2026-03-15 — Plan 01-05 executed; session management hooks, UI components, 3 API routes, 29 tests passing
+Last activity: 2026-03-15 — Plan 01-06 executed; home, active session, and recovery pages fully wired; all 63 tests pass, build clean
 
-Progress: [██░░░░░░░░] 18%
+Progress: [██░░░░░░░░] 21%
 
 ## Performance Metrics
 
@@ -70,6 +70,9 @@ Recent decisions affecting current work:
 - [01-05]: Zod v4 UUID validation requires valid UUID version/variant bits — hex placeholder UUIDs (aaaa-bbbb) are rejected; use real v4 UUIDs in tests
 - [01-05]: Supabase insert returns no data without explicit .select().single() chain — required to get new row's ID
 - [01-05]: useRef for stateRef pattern: async callbacks need current state without stale closures
+- [01-06]: useSearchParams() requires Suspense boundary in Next.js app router — missing boundary blocks build
+- [01-06]: restore(sessionId) added to useSessionLifecycle: recovery resume path sets sessionId+active without POSTing to API
+- [01-06]: Stable mock references in vi.mock factories — unstable object refs cause infinite re-render loops in component tests
 
 ### Pending Todos
 
@@ -85,6 +88,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T20:40:48Z
-Stopped at: Completed 01-05-PLAN.md (session management hooks, UI components, API routes)
-Resume file: .planning/phases/01-foundation/01-05-SUMMARY.md
+Last session: 2026-03-15T21:21:27Z
+Stopped at: Completed 01-06-PLAN.md (page wiring — complete session flow)
+Resume file: .planning/phases/01-foundation/01-06-SUMMARY.md
