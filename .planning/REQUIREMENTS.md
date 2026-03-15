@@ -98,19 +98,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SESS-01 – SESS-06 | Phase 1 | Pending |
-| PLAT-01 – PLAT-02 | Phase 1 | Pending |
-| DATA-01 – DATA-06 | Phase 2 | Pending |
-| INTEL-01 – INTEL-03 | Phase 3 | Pending |
-| CARD-01 – CARD-05 | Phase 3 | Pending |
-| WEB-01 – WEB-03 | Phase 4 | Pending |
-| POST-01 – POST-04 | Phase 5 | Pending |
+| SESS-01 – SESS-06 | Phase 1: Foundation | Pending |
+| PLAT-01 – PLAT-02 | Phase 1: Foundation | Pending |
+| DATA-01 – DATA-06 | Phase 2: Data Pipeline | Pending |
+| INTEL-01 – INTEL-03 | Phase 3: Intelligence + Cards | Pending |
+| CARD-01 – CARD-05 | Phase 3: Intelligence + Cards | Pending |
+| WEB-01 – WEB-03 | Phase 4: Web Lookup + Post-Meeting | Pending |
+| POST-01 – POST-04 | Phase 4: Web Lookup + Post-Meeting | Pending |
 
 **Coverage:**
 - v1 requirements: 29 total
 - Mapped to phases: 29
-- Unmapped: 0 ✓
+- Unmapped: 0
+- Phases: 4
 
 ---
 *Requirements defined: 2026-03-15*
-*Last updated: 2026-03-15 after initial definition*
+*Last updated: 2026-03-15 after roadmap creation*
