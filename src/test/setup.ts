@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom'
-import { vi } from 'vitest'
+import { vi, afterEach } from 'vitest'
+
+afterEach(() => {
+  vi.clearAllMocks()
+})
 
 // --- MediaRecorder mock ---
 class MockMediaRecorder {
@@ -36,16 +40,22 @@ const mockWakeLockSentinel = {
   onrelease: null,
 }
 
-vi.stubGlobal('navigator', {
-  ...navigator,
-  wakeLock: {
+Object.defineProperty(navigator, 'wakeLock', {
+  value: {
     request: vi.fn().mockResolvedValue(mockWakeLockSentinel),
   },
-  mediaDevices: {
+  configurable: true,
+  writable: true,
+})
+
+Object.defineProperty(navigator, 'mediaDevices', {
+  value: {
     getUserMedia: vi.fn().mockResolvedValue({
       getTracks: () => [{ stop: vi.fn(), kind: 'audio' }],
     }),
   },
+  configurable: true,
+  writable: true,
 })
 
 // --- Supabase mock client (exported for per-test use) ---
