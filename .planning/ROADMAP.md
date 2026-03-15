@@ -29,7 +29,16 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Agent can pause and resume the session mid-meeting without losing the transcript
   4. If the app is closed or crashes, the session transcript is automatically recovered on re-open
   5. The app installs as a PWA on iOS and Android and requests microphone permission with a clear prompt
-**Plans**: TBD
+**Plans**: 7 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Test infrastructure: Vitest config, shared mocks, all stub test files
+- [ ] 01-02-PLAN.md — Data layer: DB migration (tenants/sessions/transcript_chunks with RLS), Supabase clients, Deepgram client, session types
+- [ ] 01-03-PLAN.md — PWA shell: manifest, root layout, page routing structure, minimal service worker
+- [ ] 01-04-PLAN.md — Audio pipeline: useAudioCapture, useDeepgramStream, Deepgram token API, chunk persistence API
+- [ ] 01-05-PLAN.md — Session management: useSessionLifecycle, WakeLock hook, visibility guard, all UI components, session API routes
+- [ ] 01-06-PLAN.md — Integration wiring: home page, active session page, recovery page fully composed
+- [ ] 01-07-PLAN.md — Device checkpoint: Vercel deploy + physical iOS/Android verification
 
 ### Phase 2: Data Pipeline
 **Goal**: Admin can upload the agency's listings and documents, and the system makes them queryable within minutes
@@ -74,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/7 | Not started | - |
 | 2. Data Pipeline | 0/TBD | Not started | - |
 | 3. Intelligence + Cards | 0/TBD | Not started | - |
 | 4. Web Lookup + Post-Meeting | 0/TBD | Not started | - |
