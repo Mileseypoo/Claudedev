@@ -8,6 +8,7 @@ interface DeepgramStreamOptions {
 
 export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('idle')
+  const [liveTranscript, setLiveTranscript] = useState<string>('')
   const wsRef = useRef<WebSocket | null>(null)
   const chunkSequenceRef = useRef<number>(0)
   const heartbeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -80,12 +81,19 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
           const result = JSON.parse(event.data as string)
 
           // Step 4: On is_final with non-empty transcript, persist immediately (SESS-06)
+          // Show interim results live on screen (not saved — just for visual feedback)
+          if (result.type === 'Results' && !result.is_final) {
+            const interim = result.channel?.alternatives?.[0]?.transcript ?? ''
+            if (interim) setLiveTranscript(interim)
+          }
+
           if (
             result.type === 'Results' &&
             result.is_final &&
             result.channel?.alternatives?.[0]?.transcript?.trim()
           ) {
             const transcript = result.channel.alternatives[0].transcript
+            setLiveTranscript(transcript)
             fetch('/api/session/chunk', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -160,6 +168,7 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
 
   return {
     connectionState,
+    liveTranscript,
     startStream,
     stopStream,
     pauseStream,
