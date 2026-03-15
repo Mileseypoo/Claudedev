@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSessionLifecycle } from '@/hooks/useSessionLifecycle'
 import { useAudioCapture } from '@/hooks/useAudioCapture'
@@ -12,7 +12,11 @@ import { SessionTimer } from '@/components/session/SessionTimer'
 import { SessionControls } from '@/components/session/SessionControls'
 import { StatusBanner } from '@/components/session/StatusBanner'
 
-export default function ActiveSessionPage() {
+/**
+ * Inner component that uses useSearchParams() — must be wrapped in <Suspense>.
+ * https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+ */
+function ActiveSessionContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const sessionIdParam = searchParams.get('sessionId')
@@ -128,5 +132,16 @@ export default function ActiveSessionPage() {
         />
       </div>
     </div>
+  )
+}
+
+/**
+ * Active session page — wraps content in Suspense for useSearchParams() requirement.
+ */
+export default function ActiveSessionPage() {
+  return (
+    <Suspense>
+      <ActiveSessionContent />
+    </Suspense>
   )
 }
