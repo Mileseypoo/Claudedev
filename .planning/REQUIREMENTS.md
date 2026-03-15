@@ -14,7 +14,7 @@ Requirements for the POC release (single Dubai estate agency, manual data upload
 - [ ] **SESS-03**: App displays a clear visual indicator when recording is active
 - [ ] **SESS-04**: App requests and handles microphone permission gracefully
 - [ ] **SESS-05**: Agent can pause and resume a session mid-meeting
-- [ ] **SESS-06**: Session transcript and Q&A log auto-saves if app is closed or crashes
+- [x] **SESS-06**: Session transcript and Q&A log auto-saves if app is closed or crashes
 
 ### Answer Cards
 
@@ -54,8 +54,8 @@ Requirements for the POC release (single Dubai estate agency, manual data upload
 
 ### Platform
 
-- [ ] **PLAT-01**: App works as a mobile-first web application on iOS and Android phones
-- [ ] **PLAT-02**: POC operates as a single-tenant deployment (one agency, no login required for v1)
+- [x] **PLAT-01**: App works as a mobile-first web application on iOS and Android phones
+- [x] **PLAT-02**: POC operates as a single-tenant deployment (one agency, no login required for v1)
 
 ## v2 Requirements
 
@@ -98,8 +98,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SESS-01 – SESS-06 | Phase 1: Foundation | Pending |
-| PLAT-01 – PLAT-02 | Phase 1: Foundation | Pending |
+| SESS-01 – SESS-05 | Phase 1: Foundation | Pending |
+| SESS-06 | Phase 1: Foundation | Complete (01-02 schema + client) |
+| PLAT-01 | Phase 1: Foundation | Complete (01-03 manifest + PWA shell) |
+| PLAT-02 | Phase 1: Foundation | Complete (01-02) |
 | DATA-01 – DATA-06 | Phase 2: Data Pipeline | Pending |
 | INTEL-01 – INTEL-03 | Phase 3: Intelligence + Cards | Pending |
 | CARD-01 – CARD-05 | Phase 3: Intelligence + Cards | Pending |
@@ -114,4 +116,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-03-15*
-*Last updated: 2026-03-15 after roadmap creation*
+*Last updated: 2026-03-15 after 01-03 execution (PLAT-01 complete)*
