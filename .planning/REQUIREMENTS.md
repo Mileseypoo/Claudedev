@@ -9,11 +9,11 @@ Requirements for the POC release (single Dubai estate agency, manual data upload
 
 ### Session Management
 
-- [ ] **SESS-01**: Agent can start a live session with a single tap
-- [ ] **SESS-02**: Agent can stop/end a session with a single tap
-- [ ] **SESS-03**: App displays a clear visual indicator when recording is active
+- [x] **SESS-01**: Agent can start a live session with a single tap
+- [x] **SESS-02**: Agent can stop/end a session with a single tap
+- [x] **SESS-03**: App displays a clear visual indicator when recording is active
 - [ ] **SESS-04**: App requests and handles microphone permission gracefully
-- [ ] **SESS-05**: Agent can pause and resume a session mid-meeting
+- [x] **SESS-05**: Agent can pause and resume a session mid-meeting
 - [x] **SESS-06**: Session transcript and Q&A log auto-saves if app is closed or crashes
 
 ### Answer Cards

@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 01-03-PLAN.md (PWA shell — manifest, routing, service worker)
-last_updated: "2026-03-15T20:15:00Z"
-last_activity: 2026-03-15 — Executed plan 01-03 (PWA shell, manifest, dark theme, routing)
+stopped_at: Completed 01-05-PLAN.md (session management hooks, UI components, API routes)
+last_updated: "2026-03-15T20:40:48Z"
+last_activity: 2026-03-15 — Executed plan 01-05 (WakeLock, visibility guard, session lifecycle, ConsentModal, MicIndicator, SessionTimer, SessionControls, StatusBanner, 3 API routes)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 3
-  percent: 11
+  completed_plans: 5
+  percent: 18
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 3 of 7 in current phase (01-03 complete)
+Plan: 5 of 7 in current phase (01-05 complete)
 Status: In progress
-Last activity: 2026-03-15 — Plan 01-03 executed; PWA manifest, brand theme layout, four routes, service worker
+Last activity: 2026-03-15 — Plan 01-05 executed; session management hooks, UI components, 3 API routes, 29 tests passing
 
-Progress: [█░░░░░░░░░] 11%
+Progress: [██░░░░░░░░] 18%
 
 ## Performance Metrics
 
@@ -43,11 +43,11 @@ Progress: [█░░░░░░░░░] 11%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 3 | 3 | ~45 min |
+| 01-foundation | 5 | ~4.2hrs | ~50 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~45min), 01-02 (~45min), 01-03 (~45min)
-- Trend: Steady
+- Last 5 plans: 01-01 (~45min), 01-02 (~45min), 01-03 (~45min), 01-04 (~45min), 01-05 (~22min)
+- Trend: Steady; 01-05 faster due to clean codebase and clear patterns
 
 *Updated after each plan completion*
 
@@ -67,28 +67,12 @@ Recent decisions affecting current work:
 - [01-03]: Service worker registered via inline dangerouslySetInnerHTML script in layout.tsx — simpler than dedicated 'use client' component for POC
 - [01-03]: viewport exported as named Viewport export per Next.js 15 pattern (separate from metadata)
 - [01-03]: Home page returns null during localStorage check to prevent flash before redirect
+- [01-05]: Zod v4 UUID validation requires valid UUID version/variant bits — hex placeholder UUIDs (aaaa-bbbb) are rejected; use real v4 UUIDs in tests
+- [01-05]: Supabase insert returns no data without explicit .select().single() chain — required to get new row's ID
+- [01-05]: useRef for stateRef pattern: async callbacks need current state without stale closures
 
 ### Pending Todos
 
-- Commit plan 01-02 files to master branch (Bash sandbox restricted git commands from worktree):
-  ```bash
-  cd /c/ClaudeDev/dictator
-  git add src/types/session.ts src/lib/constants.ts src/lib/supabase/client.ts src/lib/supabase/server.ts src/lib/deepgram.ts .env.local.example
-  git commit -m "feat(01-02): create shared types, constants, and Supabase/Deepgram clients"
-  git add db/migrations/001_foundation.sql
-  git commit -m "feat(01-02): create database migration with RLS"
-  npx tsc --noEmit && npx vitest run --reporter=verbose
-  ```
-- Commit plan 01-03 files to master branch (same Bash sandbox restriction):
-  ```bash
-  cd /c/ClaudeDev/dictator
-  git add src/app/manifest.ts src/app/globals.css src/app/layout.tsx src/app/page.tsx
-  git add "src/app/(session)/active/page.tsx" "src/app/(session)/recovery/page.tsx"
-  git add public/sw.js public/icon-192.png public/icon-512.png src/lib/constants.ts
-  git add src/app/manifest.test.ts src/app/page.test.tsx
-  git commit -m "feat(01-03): PWA shell — manifest, dark brand theme, route shells, service worker"
-  npx vitest run src/app/manifest.test.ts --reporter=verbose
-  ```
 - Replace public/icon-192.png and public/icon-512.png with valid PNG binaries before PWA device testing
 - Apply db/migrations/001_foundation.sql against Supabase project
 - Add DEFAULT_TENANT_ID to .env.local for Phase 1 testing
@@ -97,10 +81,10 @@ Recent decisions affecting current work:
 
 - [Phase 1]: iOS `AudioWorklet` + `MediaRecorder` behaviour on target iPhone models requires hands-on validation before committing to PWA-only approach — do not assume MDN compatibility tables are accurate
 - [Phase 3]: Intent classification prompt engineering for estate agency conversations requires empirical tuning with real transcript samples; budget iteration time
-- [01-02]: Git commits pending — Bash sandbox restricted write git commands from worktree context. Files are on disk at correct paths but not committed to master yet.
+- [Phase 1]: Supabase env vars must be set in .env.local before integration testing can begin
 
 ## Session Continuity
 
-Last session: 2026-03-15T20:15:00Z
-Stopped at: Completed 01-03-PLAN.md (PWA shell — manifest, routing, service worker)
-Resume file: .planning/phases/01-foundation/01-03-SUMMARY.md
+Last session: 2026-03-15T20:40:48Z
+Stopped at: Completed 01-05-PLAN.md (session management hooks, UI components, API routes)
+Resume file: .planning/phases/01-foundation/01-05-SUMMARY.md
