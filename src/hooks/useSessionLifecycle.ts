@@ -19,6 +19,7 @@ interface UseSessionLifecycleReturn {
   resume: () => Promise<void>
   end: () => Promise<void>
   interrupt: () => void
+  restore: (sessionId: string) => void
 }
 
 /**
@@ -151,6 +152,19 @@ export function useSessionLifecycle(): UseSessionLifecycleReturn {
     setState((prev) => ({ ...prev, status: 'interrupted' }))
   }, [])
 
+  /**
+   * Restore an existing session from the recovery screen.
+   * Sets the sessionId and transitions to 'active' without POSTing to /api/session/start.
+   */
+  const restore = useCallback((restoredSessionId: string) => {
+    setState({
+      status: 'active',
+      sessionId: restoredSessionId,
+      startedAt: new Date(),
+      elapsedSeconds: 0,
+    })
+  }, [])
+
   return {
     status: state.status,
     sessionId: state.sessionId,
@@ -160,5 +174,6 @@ export function useSessionLifecycle(): UseSessionLifecycleReturn {
     resume,
     end,
     interrupt,
+    restore,
   }
 }

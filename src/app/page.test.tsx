@@ -2,12 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 
-// --- Mock next/navigation ---
+// --- Mock next/navigation (must be before imports that use it) ---
 const mockPush = vi.fn()
 const mockReplace = vi.fn()
+const mockRouter = { push: mockPush, replace: mockReplace }
+const mockSearchParams = new URLSearchParams()
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush, replace: mockReplace }),
-  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => mockRouter,
+  useSearchParams: () => mockSearchParams,
 }))
 
 // --- Mock useSessionLifecycle ---
@@ -35,7 +37,7 @@ vi.mock('@/hooks/useSessionLifecycle', () => ({
 }))
 
 // --- Mock useAudioCapture ---
-const mockRequestMic = vi.fn()
+const mockRequestMic = vi.fn().mockResolvedValue({ stream: {} })
 const mockStartRecording = vi.fn()
 const mockPauseRecording = vi.fn()
 const mockResumeRecording = vi.fn()
@@ -89,27 +91,45 @@ vi.mock('@/hooks/useVisibilityGuard', () => ({
   useVisibilityGuard: vi.fn(),
 }))
 
+// --- Mock fetch for recovery "start fresh" endpoint ---
+const mockFetch = vi.fn().mockResolvedValue({ ok: true })
+vi.stubGlobal('fetch', mockFetch)
+
 // --- localStorage mock ---
-const mockLocalStorage: Record<string, string> = {}
+const mockStorageData: Record<string, string> = {}
+const mockLocalStorage = {
+  getItem: vi.fn((key: string) => mockStorageData[key] ?? null),
+  setItem: vi.fn((key: string, val: string) => { mockStorageData[key] = val }),
+  removeItem: vi.fn((key: string) => { delete mockStorageData[key] }),
+  clear: vi.fn(() => { Object.keys(mockStorageData).forEach(k => delete mockStorageData[k]) }),
+}
 Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn((key: string) => mockLocalStorage[key] ?? null),
-    setItem: vi.fn((key: string, val: string) => { mockLocalStorage[key] = val }),
-    removeItem: vi.fn((key: string) => { delete mockLocalStorage[key] }),
-    clear: vi.fn(() => { Object.keys(mockLocalStorage).forEach(k => delete mockLocalStorage[k]) }),
-  },
+  value: mockLocalStorage,
   configurable: true,
   writable: true,
 })
 
 const SESSION_RECOVERY_KEY = 'dictator_session_recovery'
 
+// Import pages at the top (modules are cached after first import)
+import HomePage from './page'
+import ActivePage from './(session)/active/page'
+import RecoveryPage from './(session)/recovery/page'
+
 beforeEach(() => {
   vi.clearAllMocks()
   mockLifecycleStatus = 'idle'
   mockSessionId = null
-  // Clear local storage mock data
-  Object.keys(mockLocalStorage).forEach(k => delete mockLocalStorage[k])
+  // Clear storage data
+  Object.keys(mockStorageData).forEach(k => delete mockStorageData[k])
+  // Re-attach implementations cleared by vi.clearAllMocks
+  mockLocalStorage.getItem.mockImplementation((key: string) => mockStorageData[key] ?? null)
+  mockLocalStorage.setItem.mockImplementation((key: string, val: string) => { mockStorageData[key] = val })
+  mockLocalStorage.removeItem.mockImplementation((key: string) => { delete mockStorageData[key] })
+  mockLocalStorage.clear.mockImplementation(() => { Object.keys(mockStorageData).forEach(k => delete mockStorageData[k]) })
+  mockRequestMic.mockResolvedValue({ stream: {} })
+  mockLifecycleStart.mockResolvedValue(undefined)
+  mockFetch.mockResolvedValue({ ok: true })
 })
 
 // =====================================================================
@@ -117,27 +137,24 @@ beforeEach(() => {
 // =====================================================================
 
 describe('Home page', () => {
-  it('renders start screen when no recovery key in localStorage', async () => {
-    const { default: HomePage } = await import('./page')
+  it('renders start screen when no recovery key in localStorage', () => {
     render(<HomePage />)
     expect(screen.getByText(/Start Session/i)).toBeInTheDocument()
   })
 
   it('renders recovery screen when dictator_session_recovery exists in localStorage', async () => {
-    mockLocalStorage[SESSION_RECOVERY_KEY] = JSON.stringify({
+    mockStorageData[SESSION_RECOVERY_KEY] = JSON.stringify({
       sessionId: '550e8400-e29b-41d4-a716-446655440000',
       status: 'active',
       startedAt: '2026-03-15T20:00:00.000Z',
     })
-    const { default: HomePage } = await import('./page')
     render(<HomePage />)
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/recovery')
     })
   })
 
-  it('tapping Start Session opens the consent modal', async () => {
-    const { default: HomePage } = await import('./page')
+  it('tapping Start Session opens the consent modal', () => {
     render(<HomePage />)
     const startButton = screen.getByText(/Start Session/i)
     fireEvent.click(startButton)
@@ -145,8 +162,6 @@ describe('Home page', () => {
   })
 
   it('confirming consent calls lifecycle.start() and navigates to /active', async () => {
-    mockLifecycleStart.mockResolvedValue(undefined)
-    const { default: HomePage } = await import('./page')
     render(<HomePage />)
 
     // Open consent modal
@@ -170,8 +185,7 @@ describe('Home page', () => {
 // =====================================================================
 
 describe('Active session page', () => {
-  it('renders mic indicator and session timer', async () => {
-    const { default: ActivePage } = await import('./(session)/active/page')
+  it('renders mic indicator and session timer', () => {
     render(<ActivePage />)
     // MicIndicator has data-testid="mic-indicator"
     expect(screen.getByTestId('mic-indicator')).toBeInTheDocument()
@@ -179,8 +193,7 @@ describe('Active session page', () => {
     expect(screen.getByText('00:00:00')).toBeInTheDocument()
   })
 
-  it('renders Pause and End controls', async () => {
-    const { default: ActivePage } = await import('./(session)/active/page')
+  it('renders Pause and End controls', () => {
     render(<ActivePage />)
     expect(screen.getByText(/Pause/i)).toBeInTheDocument()
     expect(screen.getByText(/End/i)).toBeInTheDocument()
@@ -193,7 +206,6 @@ describe('Active session page', () => {
 
 describe('Recovery page', () => {
   it('redirects to / when no SESSION_RECOVERY_KEY in localStorage', async () => {
-    const { default: RecoveryPage } = await import('./(session)/recovery/page')
     render(<RecoveryPage />)
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/')
@@ -201,12 +213,11 @@ describe('Recovery page', () => {
   })
 
   it('shows session info when SESSION_RECOVERY_KEY exists', async () => {
-    mockLocalStorage[SESSION_RECOVERY_KEY] = JSON.stringify({
+    mockStorageData[SESSION_RECOVERY_KEY] = JSON.stringify({
       sessionId: '550e8400-e29b-41d4-a716-446655440000',
       status: 'active',
       startedAt: '2026-03-15T20:00:00.000Z',
     })
-    const { default: RecoveryPage } = await import('./(session)/recovery/page')
     render(<RecoveryPage />)
     await waitFor(() => {
       expect(screen.getByText(/Resume session/i)).toBeInTheDocument()
@@ -215,12 +226,11 @@ describe('Recovery page', () => {
   })
 
   it('Resume button navigates to /active with sessionId', async () => {
-    mockLocalStorage[SESSION_RECOVERY_KEY] = JSON.stringify({
+    mockStorageData[SESSION_RECOVERY_KEY] = JSON.stringify({
       sessionId: '550e8400-e29b-41d4-a716-446655440000',
       status: 'active',
       startedAt: '2026-03-15T20:00:00.000Z',
     })
-    const { default: RecoveryPage } = await import('./(session)/recovery/page')
     render(<RecoveryPage />)
     await waitFor(() => {
       expect(screen.getByText(/Resume session/i)).toBeInTheDocument()
@@ -230,18 +240,17 @@ describe('Recovery page', () => {
   })
 
   it('Start fresh clears SESSION_RECOVERY_KEY and navigates to /', async () => {
-    mockLocalStorage[SESSION_RECOVERY_KEY] = JSON.stringify({
+    mockStorageData[SESSION_RECOVERY_KEY] = JSON.stringify({
       sessionId: '550e8400-e29b-41d4-a716-446655440000',
       status: 'active',
       startedAt: '2026-03-15T20:00:00.000Z',
     })
-    const { default: RecoveryPage } = await import('./(session)/recovery/page')
     render(<RecoveryPage />)
     await waitFor(() => {
       expect(screen.getByText(/Start fresh/i)).toBeInTheDocument()
     })
     fireEvent.click(screen.getByText(/Start fresh/i))
-    expect(window.localStorage.removeItem).toHaveBeenCalledWith(SESSION_RECOVERY_KEY)
+    expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(SESSION_RECOVERY_KEY)
     expect(mockReplace).toHaveBeenCalledWith('/')
   })
 })
