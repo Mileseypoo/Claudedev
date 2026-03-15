@@ -14,7 +14,7 @@ interface UseSessionLifecycleReturn {
   status: SessionState
   sessionId: string | null
   elapsedSeconds: number
-  start: (consentTimestamp: string) => Promise<void>
+  start: (consentTimestamp: string) => Promise<string>
   pause: () => Promise<void>
   resume: () => Promise<void>
   end: () => Promise<void>
@@ -91,6 +91,8 @@ export function useSessionLifecycle(): UseSessionLifecycleReturn {
       startedAt: now,
       elapsedSeconds: 0,
     })
+
+    return sessionId
   }, [])
 
   const pause = useCallback(async () => {

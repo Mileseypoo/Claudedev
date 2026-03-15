@@ -128,7 +128,7 @@ beforeEach(() => {
   mockLocalStorage.removeItem.mockImplementation((key: string) => { delete mockStorageData[key] })
   mockLocalStorage.clear.mockImplementation(() => { Object.keys(mockStorageData).forEach(k => delete mockStorageData[k]) })
   mockRequestMic.mockResolvedValue({ stream: {} })
-  mockLifecycleStart.mockResolvedValue(undefined)
+  mockLifecycleStart.mockResolvedValue('550e8400-e29b-41d4-a716-446655440000')
   mockFetch.mockResolvedValue({ ok: true })
 })
 
@@ -175,7 +175,7 @@ describe('Home page', () => {
       expect(mockLifecycleStart).toHaveBeenCalledWith(expect.any(String))
     })
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/active')
+      expect(mockPush).toHaveBeenCalledWith('/active?sessionId=550e8400-e29b-41d4-a716-446655440000')
     })
   })
 })

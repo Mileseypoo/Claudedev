@@ -20,8 +20,8 @@ export default function Home() {
   }, [router])
 
   async function handleConsentConfirm(consentTimestamp: string) {
-    await lifecycle.start(consentTimestamp)
-    router.push('/active')
+    const sessionId = await lifecycle.start(consentTimestamp)
+    router.push(`/active?sessionId=${sessionId}`)
   }
 
   return (
