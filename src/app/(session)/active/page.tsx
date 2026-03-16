@@ -82,11 +82,16 @@ function ActiveSessionContent() {
   }, [lifecycle, audio])
 
   const handleEnd = useCallback(async () => {
+    const sessionId = lifecycle.sessionId
+    const durationSeconds = lifecycle.elapsedSeconds
     await lifecycle.end()
     audio.stopRecording()
     stream.stopStream()
     await wakeLock.releaseWakeLock()
-    router.push('/')
+    const params = new URLSearchParams()
+    if (sessionId) params.set('sessionId', sessionId)
+    params.set('duration', String(durationSeconds))
+    router.push(`/summary?${params.toString()}`)
   }, [lifecycle, audio, stream, wakeLock, router])
 
   // Visibility guard: pause on hide, show banner on return (no auto-resume)
