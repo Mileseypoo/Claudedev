@@ -3,6 +3,8 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import type { TranscriptChunk } from '@/types/session'
+import type { AnswerCard } from '@/types/cards'
+import { QASection } from './components/QASection'
 
 function formatDuration(seconds: number): string {
   const m = Math.floor(seconds / 60)
@@ -19,6 +21,7 @@ function SummaryContent() {
 
   const [chunks, setChunks] = useState<TranscriptChunk[] | null>(null)
   const [fetchError, setFetchError] = useState(false)
+  const [cards, setCards] = useState<AnswerCard[]>([])
 
   useEffect(() => {
     if (!sessionId) {
@@ -36,6 +39,20 @@ function SummaryContent() {
         setFetchError(true)
         setChunks([])
       })
+  }, [sessionId])
+
+  useEffect(() => {
+    if (!sessionId) {
+      setCards([])
+      return
+    }
+    fetch(`/api/session/cards?sessionId=${encodeURIComponent(sessionId)}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch failed')
+        return res.json()
+      })
+      .then((json) => setCards(json.cards ?? []))
+      .catch(() => setCards([]))
   }, [sessionId])
 
   const loading = chunks === null
@@ -84,6 +101,9 @@ function SummaryContent() {
           </div>
         )}
       </div>
+
+      {/* Q&A section — all answer cards from this session */}
+      <QASection cards={cards} />
 
       {/* Start new session */}
       <button

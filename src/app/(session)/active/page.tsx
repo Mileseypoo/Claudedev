@@ -7,10 +7,12 @@ import { useAudioCapture } from '@/hooks/useAudioCapture'
 import { useDeepgramStream } from '@/hooks/useDeepgramStream'
 import { useWakeLock } from '@/hooks/useWakeLock'
 import { useVisibilityGuard } from '@/hooks/useVisibilityGuard'
+import { useAnswerCards } from '@/hooks/useAnswerCards'
 import { MicIndicator } from '@/components/session/MicIndicator'
 import { SessionTimer } from '@/components/session/SessionTimer'
 import { SessionControls } from '@/components/session/SessionControls'
 import { StatusBanner } from '@/components/session/StatusBanner'
+import { CardStack } from './components/CardStack'
 
 /**
  * Inner component that uses useSearchParams() — must be wrapped in <Suspense>.
@@ -22,6 +24,7 @@ function ActiveSessionContent() {
   const sessionIdParam = searchParams.get('sessionId')
 
   const lifecycle = useSessionLifecycle()
+  const { cards, dismissCard } = useAnswerCards(lifecycle.sessionId)
   const audio = useAudioCapture()
   const stream = useDeepgramStream({
     onMicInterrupted: () => {
@@ -119,8 +122,7 @@ function ActiveSessionContent() {
         onResume={handleResume}
       />
 
-      {/* Phase 3: answer cards will appear here */}
-      <div className="flex-1" />
+      <CardStack cards={cards} onDismiss={dismissCard} />
 
       {/* Center: mic indicator + timer */}
       <div className="flex-1 flex items-center justify-center">
