@@ -8,6 +8,7 @@ interface DeepgramStreamOptions {
 
 export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
   const [connectionState, setConnectionState] = useState<ConnectionState>('idle')
+  const [lastError, setLastError] = useState<string>('')
   const wsRef = useRef<WebSocket | null>(null)
   const chunkSequenceRef = useRef<number>(0)
   const heartbeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -59,6 +60,7 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
       url.searchParams.set('model', 'nova-2')
       url.searchParams.set('smart_format', 'true')
       url.searchParams.set('interim_results', 'true')
+      url.searchParams.set('endpointing', '300') // mark final after 300ms silence
       // Do NOT set encoding/sample_rate — those are for raw PCM streams only.
       // For WebM/Opus and MP4 containers, Deepgram auto-detects the format.
 
@@ -67,8 +69,9 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
       // MediaRecorder chunk contains the WebM container header (EBML + Segment).
       // If the first chunk is dropped (WS not yet open), all subsequent chunks are
       // unparseable and Deepgram returns no transcripts.
-      url.searchParams.set('apikey', token)
-      const ws = new WebSocket(url.toString())
+      // Auth: pass API key as WebSocket subprotocol ['token', key] — NOT as URL query param.
+      // URL param (?apikey= or ?token=) produces 1006 on Deepgram's endpoint.
+      const ws = new WebSocket(url.toString(), ['token', token])
       ws.binaryType = 'arraybuffer'
       wsRef.current = ws
 
@@ -81,7 +84,14 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
         ws.onerror = () => {
           setConnectionState('disconnected')
           clearHeartbeat()
-          reject(new Error('WebSocket failed to connect'))
+          reject(new Error('WebSocket error'))
+        }
+        ws.onclose = (e) => {
+          setConnectionState('disconnected')
+          clearHeartbeat()
+          const msg = `code:${e.code} ${e.reason}`
+          setLastError(msg)
+          reject(new Error(msg))
         }
       })
 
@@ -92,7 +102,7 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
           // Step 4: On is_final with non-empty transcript, persist immediately (SESS-06)
           if (
             result.type === 'Results' &&
-            result.is_final &&
+            (result.is_final || result.speech_final) &&
             result.channel?.alternatives?.[0]?.transcript?.trim()
           ) {
             const transcript = result.channel.alternatives[0].transcript
@@ -170,6 +180,7 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
 
   return {
     connectionState,
+    lastError,
     startStream,
     stopStream,
     pauseStream,

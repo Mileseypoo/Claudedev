@@ -18,18 +18,15 @@ export async function POST(request: Request) {
 
   const { client, tenantId } = getServerSupabase()
 
-  const { error } = await client.from('transcript_chunks').upsert(
-    {
-      session_id: body.data.sessionId,
-      tenant_id: tenantId,
-      sequence: body.data.sequence,
-      text: body.data.text,
-      start_seconds: body.data.startSeconds,
-      duration_seconds: body.data.durationSeconds ?? null,
-      is_final: true,
-    },
-    { onConflict: 'session_id,sequence' },
-  )
+  const { error } = await client.from('transcript_chunks').insert({
+    session_id: body.data.sessionId,
+    tenant_id: tenantId,
+    sequence: body.data.sequence,
+    text: body.data.text,
+    start_seconds: body.data.startSeconds,
+    duration_seconds: body.data.durationSeconds ?? null,
+    is_final: true,
+  })
 
   if (error) {
     return Response.json({ error: 'Save failed' }, { status: 500 })

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 
 export type MicError = 'not_allowed' | 'not_found' | 'not_supported' | 'unknown'
 export type MicResult = { stream: MediaStream } | { error: MicError }
@@ -13,6 +13,10 @@ interface AudioCaptureState {
 }
 
 export function useAudioCapture() {
+  // Ref so startRecording always sees the current stream even when called
+  // from a stale closure (e.g. after requestMic() triggers a re-render)
+  const streamRef = useRef<MediaStream | null>(null)
+
   const [state, setState] = useState<AudioCaptureState>({
     recorder: null,
     stream: null,
@@ -61,6 +65,7 @@ export function useAudioCapture() {
         },
       })
 
+      streamRef.current = stream
       setState((s) => ({ ...s, stream, error: null }))
       return { stream }
     } catch (err) {
@@ -88,11 +93,11 @@ export function useAudioCapture() {
    */
   const startRecording = useCallback(
     (onDataAvailable: (blob: Blob) => void): MediaRecorder | null => {
-      if (!state.stream) return null
+      if (!streamRef.current) return null
 
       const mimeType = getSupportedMimeType()
       const recorder = new MediaRecorder(
-        state.stream,
+        streamRef.current,
         mimeType ? { mimeType } : undefined,
       )
 
@@ -124,7 +129,7 @@ export function useAudioCapture() {
       setState((s) => ({ ...s, recorder, mimeType, isRecording: true }))
       return recorder
     },
-    [state.stream, getSupportedMimeType],
+    [getSupportedMimeType],
   )
 
   const pauseRecording = useCallback(() => {

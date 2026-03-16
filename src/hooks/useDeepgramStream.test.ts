@@ -80,7 +80,7 @@ describe('useDeepgramStream', () => {
       expect(mockFetch).toHaveBeenCalledWith('/api/deepgram-token', { method: 'POST' })
     })
 
-    it('opens a WebSocket to wsUrl with apikey as URL query param', async () => {
+    it('opens a WebSocket to wsUrl with token as subprotocol', async () => {
       const { result } = renderHook(() => useDeepgramStream())
 
       await act(async () => {
@@ -90,7 +90,9 @@ describe('useDeepgramStream', () => {
 
       expect(mockWSInstance).not.toBeNull()
       expect(mockWSInstance!.url).toContain('api.deepgram.com')
-      expect(mockWSInstance!.url).toContain('apikey=test-token')
+      // Auth is passed as subprotocol ['token', key] — NOT as URL query param.
+      // URL param method produces 1006 on Deepgram's endpoint.
+      expect(mockWSInstance!.protocols).toContain('test-token')
     })
 
     it('sets connectionState to "connected" on WebSocket open', async () => {
