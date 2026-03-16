@@ -1,28 +1,15 @@
-// Source: https://deepgram.com/learn/protecting-api-key
-// This route issues a short-lived Deepgram API key (30s TTL).
-// The browser uses this key to open a direct WebSocket to Deepgram.
-// The real API key never reaches the browser.
-import { deepgramClient } from '@/lib/deepgram'
-
+// POC: returns the API key directly from the server — key never hardcoded in client bundle.
+// TODO production: replace with manage.v1.projects.keys.create() using an admin-scoped key
+// to issue short-lived tokens. Source: https://deepgram.com/learn/protecting-api-key
 export async function POST() {
-  const projectId = process.env.DEEPGRAM_PROJECT_ID
+  const apiKey = process.env.DEEPGRAM_API_KEY
 
-  if (!projectId) {
-    return Response.json({ error: 'DEEPGRAM_PROJECT_ID not configured' }, { status: 500 })
-  }
-
-  const response = await deepgramClient.manage.v1.projects.keys.create(projectId, {
-    comment: 'browser-temp',
-    scopes: ['usage:write'],
-    time_to_live_in_seconds: 30,
-  })
-
-  if (!response || !response.key) {
-    return Response.json({ error: 'Token creation failed' }, { status: 500 })
+  if (!apiKey) {
+    return Response.json({ error: 'DEEPGRAM_API_KEY not configured' }, { status: 500 })
   }
 
   return Response.json({
-    token: response.key,
+    token: apiKey,
     wsUrl: 'wss://api.deepgram.com/v1/listen',
   })
 }
