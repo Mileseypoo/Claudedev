@@ -56,11 +56,14 @@ function ActiveSessionContent() {
         return
       }
 
+      // Wait for WebSocket to open BEFORE starting MediaRecorder.
+      // The first audio chunk contains the WebM container header — if it's
+      // dropped because the WS isn't open yet, Deepgram can't parse any audio.
+      await stream.startStream(activeSessionId!, audio.mimeType)
+
       audio.startRecording((blob: Blob) => {
         stream.sendAudioChunk(blob)
       })
-
-      stream.startStream(activeSessionId!, audio.mimeType)
 
       wakeLock.requestWakeLock()
     }

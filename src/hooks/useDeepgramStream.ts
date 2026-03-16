@@ -62,17 +62,28 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
       // Do NOT set encoding/sample_rate — those are for raw PCM streams only.
       // For WebM/Opus and MP4 containers, Deepgram auto-detects the format.
 
-      // Step 3: Open browser-direct WebSocket
-      // API key goes in URL query param (subprotocol ['token', x] is for JWT tokens only)
+      // Step 3: Open browser-direct WebSocket and wait until it's open before returning.
+      // CRITICAL: startRecording must not begin until the WS is open, because the first
+      // MediaRecorder chunk contains the WebM container header (EBML + Segment).
+      // If the first chunk is dropped (WS not yet open), all subsequent chunks are
+      // unparseable and Deepgram returns no transcripts.
       url.searchParams.set('apikey', token)
       const ws = new WebSocket(url.toString())
       ws.binaryType = 'arraybuffer'
       wsRef.current = ws
 
-      ws.onopen = () => {
-        setConnectionState('connected')
-        resetHeartbeat()
-      }
+      await new Promise<void>((resolve, reject) => {
+        ws.onopen = () => {
+          setConnectionState('connected')
+          resetHeartbeat()
+          resolve()
+        }
+        ws.onerror = () => {
+          setConnectionState('disconnected')
+          clearHeartbeat()
+          reject(new Error('WebSocket failed to connect'))
+        }
+      })
 
       ws.onmessage = (event) => {
         try {
