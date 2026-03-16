@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation** - PWA shell, microphone capture, real-time transcription, session lifecycle
 - [ ] **Phase 2: Data Pipeline** - CSV/PDF upload, document ingestion, vector + SQL indexing, admin portal
-- [ ] **Phase 3: Intelligence + Cards** - Intent detection, RAG answer generation, SSE card delivery, card stack UI
+- [ ] **Phase 3: Intelligence + Cards** - Intent detection, RAG answer generation, Realtime card delivery, card stack UI
 - [ ] **Phase 4: Web Lookup + Post-Meeting** - Agent-confirmed web search, session controls, email draft, review and send
 
 ## Phase Details
@@ -71,7 +71,15 @@ Plans:
   3. Each card shows a glanceable 1–2 sentence answer; tapping it expands to more detail and a source link
   4. Normal conversation does not produce more than 2–3 cards per minute; rhetorical statements and agent speech do not trigger cards
   5. Agent can swipe an individual card away to dismiss it
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — DB migration (answer_cards + RLS), TypeScript types (AnswerCard, IntentResult), install @anthropic-ai/sdk
+- [ ] 03-02-PLAN.md — Intent classification: classifyIntent() with Claude Haiku 4.5 structured outputs (TDD)
+- [ ] 03-03-PLAN.md — Retrieval + generation: retrieveFromListings/PDF/Stats, generateAnswer() with Haiku 4.5 (TDD)
+- [ ] 03-04-PLAN.md — Pipeline orchestrator: triggerIntelligence(), chunk route waitUntil hook, hard dedup (TDD)
+- [ ] 03-05-PLAN.md — Active session card UI: useAnswerCards Realtime hook, CardStack, AnswerCard with swipe dismiss
+- [ ] 03-06-PLAN.md — Summary Q&A section: GET /api/session/cards, QASection component, extend summary page
 
 ### Phase 4: Web Lookup + Post-Meeting
 **Goal**: Agent can look up questions outside company data with a single confirmed tap, and receives a ready-to-send follow-up email when the meeting ends
@@ -94,5 +102,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/7 | In progress | - |
 | 2. Data Pipeline | 6/7 | In Progress|  |
-| 3. Intelligence + Cards | 0/TBD | Not started | - |
+| 3. Intelligence + Cards | 0/6 | Planned | - |
 | 4. Web Lookup + Post-Meeting | 0/TBD | Not started | - |
