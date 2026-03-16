@@ -1,5 +1,7 @@
 import { z } from 'zod'
+import { waitUntil } from '@vercel/functions'
 import { getServerSupabase } from '@/lib/supabase/server'
+import { triggerIntelligence } from '@/lib/intelligence/trigger'
 
 // Zod schema for incoming chunk payload
 const ChunkSchema = z.object({
@@ -31,6 +33,10 @@ export async function POST(request: Request) {
   if (error) {
     return Response.json({ error: 'Save failed' }, { status: 500 })
   }
+
+  // Non-blocking: trigger intelligence pipeline after chunk is persisted
+  // waitUntil keeps the Vercel function alive until triggerIntelligence resolves
+  waitUntil(triggerIntelligence(body.data.sessionId, tenantId))
 
   return Response.json({ ok: true })
 }
