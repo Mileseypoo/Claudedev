@@ -18,11 +18,11 @@ Requirements for the POC release (single Dubai estate agency, manual data upload
 
 ### Answer Cards
 
-- [ ] **CARD-01**: Answers surface as cards that stack upward (newest at bottom, older cards scroll off top)
-- [ ] **CARD-02**: Each card shows a short, glanceable answer (one to two sentences)
-- [ ] **CARD-03**: Agent can tap a card to expand it for slightly more detail
-- [ ] **CARD-04**: Card includes a link that opens the source in the browser (company website, PDF, or web result)
-- [ ] **CARD-05**: Agent can dismiss individual cards by swiping them away
+- [x] **CARD-01**: Answers surface as cards that stack upward (newest at bottom, older cards scroll off top)
+- [x] **CARD-02**: Each card shows a short, glanceable answer (one to two sentences)
+- [x] **CARD-03**: Agent can tap a card to expand it for slightly more detail
+- [x] **CARD-04**: Card includes a link that opens the source in the browser (company website, PDF, or web result)
+- [x] **CARD-05**: Agent can dismiss individual cards by swiping them away
 
 ### Company Data & Intelligence
 
@@ -35,9 +35,9 @@ Requirements for the POC release (single Dubai estate agency, manual data upload
 
 ### Question Detection & Answering
 
-- [ ] **INTEL-01**: App detects questions and relevant topics from the live transcript
-- [ ] **INTEL-02**: App retrieves relevant answers from company data and surfaces them as cards
-- [ ] **INTEL-03**: Question detection does not flood the agent with cards (max 2-3 per minute under normal conversation)
+- [x] **INTEL-01**: App detects questions and relevant topics from the live transcript
+- [x] **INTEL-02**: App retrieves relevant answers from company data and surfaces them as cards
+- [x] **INTEL-03**: Question detection does not flood the agent with cards (max 2-3 per minute under normal conversation)
 
 ### Web Lookup
 

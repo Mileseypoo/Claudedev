@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_complete
-stopped_at: Phase 02 complete — all 7 plans executed, human verification passed
-last_updated: "2026-03-16T13:30:00.000Z"
-last_activity: 2026-03-16 — Phase 02 verified end-to-end. CSV upload (5 listings indexed), PDF upload (Processing → Indexed), polling confirmed, delete confirmed.
+status: executing
+stopped_at: Completed 03-01-PLAN.md (answer_cards migration + TypeScript type contracts)
+last_updated: "2026-03-16T14:49:19.738Z"
+last_activity: 2026-03-16 — Plan 02-04 executed (TDD); POST /api/admin/upload implemented, 8 tests pass, TypeScript clean
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 14
-  completed_plans: 14
-  percent: 50
+  total_plans: 20
+  completed_plans: 13
+  percent: 25
 ---
 
 # Project State
@@ -52,6 +52,7 @@ Progress: [███░░░░░░░] 25%
 
 *Updated after each plan completion*
 | Phase 02 P06 | 8 | 1 tasks | 6 files |
+| Phase 03-intelligence-cards P01 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Recent decisions affecting current work:
 - [02-04]: vi.hoisted() required for mock vars used in vi.mock factories to avoid temporal dead zone hoisting errors
 - [02-04]: Node native File.size getter cannot be overridden via Object.defineProperty — use plain mock objects for size-dependent tests
 - [Phase 02]: vi.useFakeTimers() in beforeEach blocks waitFor Promise resolution — removed global fake timers; polling test uses vi.spyOn(global.setInterval) with real timers
+- [Phase 03-01]: IntentResult uses snake_case fields to match Claude structured output Zod schema; answer_cards adds question_text column required by card generation
+- [Phase 03-01]: Realtime on answer_cards requires manual Supabase Dashboard step — ALTER PUBLICATION supabase_realtime needs superuser not available in managed SQL editor
 
 ### Pending Todos
 
@@ -99,6 +102,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:08:55.348Z
-Stopped at: Completed 02-06-PLAN.md (Admin Portal UI — 9 TDD tests pass)
+Last session: 2026-03-16T14:49:19.736Z
+Stopped at: Completed 03-01-PLAN.md (answer_cards migration + TypeScript type contracts)
 Resume file: None

@@ -102,5 +102,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/7 | In progress | - |
 | 2. Data Pipeline | 6/7 | In Progress|  |
-| 3. Intelligence + Cards | 0/6 | Planned | - |
+| 3. Intelligence + Cards | 1/6 | In Progress|  |
 | 4. Web Lookup + Post-Meeting | 0/TBD | Not started | - |
