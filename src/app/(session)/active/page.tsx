@@ -111,18 +111,8 @@ function ActiveSessionContent() {
         onResume={handleResume}
       />
 
-      {/* Live transcript — Phase 3 will replace this with answer cards */}
-      <div className="flex-1 overflow-y-auto px-6 pt-4">
-        {stream.liveTranscript ? (
-          <p className="text-[var(--text-muted)] text-sm leading-relaxed">
-            {stream.liveTranscript}
-          </p>
-        ) : (
-          <p className="text-[var(--text-muted)] text-sm opacity-40 text-center mt-8">
-            Listening…
-          </p>
-        )}
-      </div>
+      {/* Phase 3: answer cards will appear here */}
+      <div className="flex-1" />
 
       {/* Center: mic indicator + timer */}
       <div className="flex-1 flex items-center justify-center">
