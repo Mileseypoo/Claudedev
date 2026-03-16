@@ -3,6 +3,11 @@ import type { NextRequest } from 'next/server'
 
 const PUBLIC_PATHS = ['/login', '/api/auth/login']
 
+// Fixed sentinel value stored in the cookie — password validation happens
+// in the API route (Node.js runtime) which reliably reads process.env.
+// Middleware only checks this sentinel to avoid Edge runtime env var issues.
+const AUTH_SENTINEL = 'dictator-authenticated-v1'
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -11,9 +16,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Check auth cookie
+  // Check auth cookie contains the sentinel value
   const auth = request.cookies.get('site-auth')
-  if (auth?.value === process.env.SITE_PASSWORD) {
+  if (auth?.value === AUTH_SENTINEL) {
     return NextResponse.next()
   }
 

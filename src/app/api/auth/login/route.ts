@@ -10,8 +10,8 @@ export async function POST(request: Request) {
   const redirectTo = typeof from === 'string' && from.startsWith('/') ? from : '/'
   const response = NextResponse.json({ ok: true, redirectTo })
 
-  // Secure, HTTP-only cookie — 30 day expiry
-  response.cookies.set('site-auth', process.env.SITE_PASSWORD!, {
+  // Secure, HTTP-only cookie storing sentinel (not the password itself)
+  response.cookies.set('site-auth', 'dictator-authenticated-v1', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
