@@ -3,11 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockParse = vi.hoisted(() => vi.fn())
 
-vi.mock('@anthropic-ai/sdk', () => ({
-  default: vi.fn().mockImplementation(() => ({
-    messages: { parse: mockParse },
-  })),
-}))
+vi.mock('@anthropic-ai/sdk', () => {
+  // Must use regular function (not arrow) — arrow functions cannot be used as constructors
+  const MockAnthropic = vi.fn(function (this: unknown) {
+    return { messages: { parse: mockParse } }
+  })
+  return { default: MockAnthropic }
+})
 
 vi.mock('@anthropic-ai/sdk/helpers/zod', () => ({
   zodOutputFormat: vi.fn().mockReturnValue({ type: 'json_schema', json_schema: {} }),
