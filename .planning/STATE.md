@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 01-06-PLAN.md (page wiring — complete session flow)
-last_updated: "2026-03-15T21:21:27Z"
-last_activity: 2026-03-15 — Executed plan 01-06; wired all hooks and components into home, active, and recovery pages; 10 new integration tests, all 63 tests passing, build clean
+stopped_at: Completed 02-01-PLAN.md (foundation — packages, migration, types, test stubs)
+last_updated: "2026-03-16T11:35:00Z"
+last_activity: 2026-03-16 — Executed plan 02-01; installed 5 packages, created pgvector DB migration (4 tables, 2 functions), defined 8 TypeScript types, scaffolded 9 test stub files (22 todos); 63 tests passing, 0 failures
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 6
-  percent: 21
+  completed_plans: 7
+  percent: 25
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-15)
 
 **Core value:** The agent always has the right answer at the right moment — without breaking the flow of conversation.
-**Current focus:** Phase 1 — Foundation (Plan 04: Audio Pipeline next)
+**Current focus:** Phase 2 — Data Pipeline (Plan 02: CSV parsing next)
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation)
-Plan: 6 of 7 in current phase (01-06 complete)
+Phase: 2 of 4 (Data Pipeline)
+Plan: 1 of ? in current phase (02-01 complete)
 Status: In progress
-Last activity: 2026-03-15 — Plan 01-06 executed; home, active session, and recovery pages fully wired; all 63 tests pass, build clean
+Last activity: 2026-03-16 — Plan 02-01 executed; installed packages, created DB migration (pgvector, 4 tables, 2 functions), TypeScript types, 9 test stub files (22 todos); 63 tests pass, build clean
 
-Progress: [██░░░░░░░░] 21%
+Progress: [███░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -44,6 +44,7 @@ Progress: [██░░░░░░░░] 21%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 5 | ~4.2hrs | ~50 min |
+| 02-data-pipeline | 1 | ~8 min | ~8 min |
 
 **Recent Trend:**
 - Last 5 plans: 01-01 (~45min), 01-02 (~45min), 01-03 (~45min), 01-04 (~45min), 01-05 (~22min)
@@ -73,6 +74,8 @@ Recent decisions affecting current work:
 - [01-06]: useSearchParams() requires Suspense boundary in Next.js app router — missing boundary blocks build
 - [01-06]: restore(sessionId) added to useSessionLifecycle: recovery resume path sets sessionId+active without POSTing to API
 - [01-06]: Stable mock references in vi.mock factories — unstable object refs cause infinite re-render loops in component tests
+- [02-01]: Test stubs use it.todo() exclusively — no imports from production modules, ensuring suite passes before implementation exists
+- [02-01]: pgvector HNSW index uses vector_cosine_ops for cosine similarity in match_document_chunks function
 
 ### Pending Todos
 
@@ -88,6 +91,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T21:21:27Z
-Stopped at: Completed 01-06-PLAN.md (page wiring — complete session flow)
-Resume file: .planning/phases/01-foundation/01-06-SUMMARY.md
+Last session: 2026-03-16T11:35:00Z
+Stopped at: Completed 02-01-PLAN.md (foundation — packages, migration, types, test stubs)
+Resume file: .planning/phases/02-data-pipeline/02-01-SUMMARY.md
