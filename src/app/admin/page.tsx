@@ -9,6 +9,7 @@ export default function AdminPage() {
   const [uploads, setUploads] = useState<Upload[]>([])
   const [stats, setStats] = useState<ListingStatsData | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const fetchUploads = useCallback(async () => {
     const res = await fetch('/api/admin/uploads')
@@ -42,12 +43,20 @@ export default function AdminPage() {
 
   async function handleUpload(file: File) {
     setIsUploading(true)
+    setUploadError(null)
     try {
       const formData = new FormData()
       formData.append('file', file)
-      await fetch('/api/admin/upload', { method: 'POST', body: formData })
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: formData })
+      if (!res.ok) {
+        const body = await res.json()
+        setUploadError(body.errors?.join(', ') ?? body.error ?? `Upload failed (${res.status})`)
+        return
+      }
       await fetchUploads()
       await fetchStats()
+    } catch {
+      setUploadError('Network error — please try again')
     } finally {
       setIsUploading(false)
     }
@@ -73,6 +82,11 @@ export default function AdminPage() {
       </div>
 
       <FileUploadZone onUpload={handleUpload} isUploading={isUploading} />
+      {uploadError && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {uploadError}
+        </div>
+      )}
 
       <StatsPreview stats={stats} />
 

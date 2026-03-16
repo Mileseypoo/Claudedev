@@ -1,0 +1,6 @@
+property_id,address,area,price_aed,bedrooms,bathrooms,size_sqft,status,developer,community,property_type,sold_date
+PROP001,101 Marina Boulevard,Dubai Marina,1850000,2,2,1150,available,Emaar,Marina Walk,apartment,
+PROP002,Suite 5B Palm Tower,Palm Jumeirah,4200000,3,3,2200,available,Nakheel,Palm Fronds,apartment,
+PROP003,7 Canal View Drive,Business Bay,980000,1,1,750,available,Damac,Canal Heights,apartment,
+PROP004,22 Golf Course Road,Emirates Hills,8500000,5,6,6000,sold,Emaar,Signature Villas,villa,2024-11-20
+PROP005,14 Creek Harbour Walk,Dubai Creek Harbour,2100000,2,2,1300,reserved,Emaar,Creek Gate,apartment,
