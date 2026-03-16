@@ -65,8 +65,10 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
         url.searchParams.set('sample_rate', '16000')
       }
 
-      // Step 3: Open browser-direct WebSocket (ANTI-PATTERN: no relay through Next.js)
-      const ws = new WebSocket(url.toString(), ['token', token])
+      // Step 3: Open browser-direct WebSocket
+      // API key goes in URL query param (subprotocol ['token', x] is for JWT tokens only)
+      url.searchParams.set('apikey', token)
+      const ws = new WebSocket(url.toString())
       ws.binaryType = 'arraybuffer'
       wsRef.current = ws
 
