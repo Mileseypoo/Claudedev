@@ -50,7 +50,16 @@ Plans:
   3. Admin can view, delete, and re-upload files from the portal without developer intervention
   4. A query against listing data returns a structured result drawn from SQL (not RAG), producing accurate prices and availability
   5. Stats talking points (e.g. "3 properties sold this week") surface in test queries against the indexed data
-**Plans**: TBD
+**Plans**: 7 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Wave 0 foundation: packages, DB migration, TypeScript types, 9 test stub files
+- [ ] 02-02-PLAN.md — CSV parser: parseCsv with PapaParse + Zod validation (TDD)
+- [ ] 02-03-PLAN.md — PDF pipeline libs: extractPdfText, chunkText, generateEmbeddings (TDD)
+- [ ] 02-04-PLAN.md — Upload API route: CSV sync upsert + PDF async waitUntil dispatch (TDD)
+- [ ] 02-05-PLAN.md — Management API routes: uploads list, delete upload, stats (TDD)
+- [ ] 02-06-PLAN.md — Admin portal UI: FileUploadZone, UploadedFilesList, StatsPreview (TDD)
+- [ ] 02-07-PLAN.md — Integration wiring: deploy + physical CSV/PDF upload verification
 
 ### Phase 3: Intelligence + Cards
 **Goal**: Agent speaks a question during a meeting and sees a relevant answer card appear on their phone within 8 seconds, drawn from company data
@@ -84,6 +93,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/7 | In progress | - |
-| 2. Data Pipeline | 0/TBD | Not started | - |
+| 2. Data Pipeline | 0/7 | Not started | - |
 | 3. Intelligence + Cards | 0/TBD | Not started | - |
 | 4. Web Lookup + Post-Meeting | 0/TBD | Not started | - |
