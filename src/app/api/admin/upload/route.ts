@@ -57,12 +57,17 @@ export async function POST(request: Request) {
       .single()
 
     // Upsert listings — DATA-06: CSV rows go to typed SQL table, NOT vector store
-    const listingRows = rows.map((row) => ({ ...row, tenant_id: tenantId }))
-    await client
+    // sold_date: convert empty string to null (PostgreSQL date column rejects '')
+    const listingRows = rows.map((row) => ({
+      ...row,
+      tenant_id: tenantId,
+      sold_date: row.sold_date || null,
+    }))
+    const { error: upsertError } = await client
       .from('listings')
       .upsert(listingRows, { onConflict: 'tenant_id,property_id' })
+    if (upsertError) console.error('listings upsert failed:', upsertError.message)
 
-    // Recalculate aggregate stats
     await client.rpc('recalculate_listing_stats', { p_tenant_id: tenantId })
 
     return Response.json(
