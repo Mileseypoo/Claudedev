@@ -59,11 +59,8 @@ export function useDeepgramStream(options: DeepgramStreamOptions = {}) {
       url.searchParams.set('model', 'nova-2')
       url.searchParams.set('smart_format', 'true')
       url.searchParams.set('interim_results', 'true')
-      // Pass encoding hint if mimeType is opus-based (mp4/aac: Deepgram auto-detects)
-      if (mimeType.includes('opus')) {
-        url.searchParams.set('encoding', 'opus')
-        url.searchParams.set('sample_rate', '16000')
-      }
+      // Do NOT set encoding/sample_rate — those are for raw PCM streams only.
+      // For WebM/Opus and MP4 containers, Deepgram auto-detects the format.
 
       // Step 3: Open browser-direct WebSocket
       // API key goes in URL query param (subprotocol ['token', x] is for JWT tokens only)
