@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-01-PLAN.md (foundation — packages, migration, types, test stubs)
-last_updated: "2026-03-16T11:35:00Z"
-last_activity: 2026-03-16 — Executed plan 02-01; installed 5 packages, created pgvector DB migration (4 tables, 2 functions), defined 8 TypeScript types, scaffolded 9 test stub files (22 todos); 63 tests passing, 0 failures
+stopped_at: Completed 02-02-PLAN.md (CSV parser — parseCsv, ListingRowSchema, 8 tests)
+last_updated: "2026-03-16T12:34:00Z"
+last_activity: 2026-03-16 — Executed plan 02-02 (TDD); created parseCsv with papaparse+zod, 8 tests pass, TypeScript clean
 progress:
   total_phases: 4
   completed_phases: 0
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 2 of 4 (Data Pipeline)
-Plan: 1 of ? in current phase (02-01 complete)
+Plan: 2 of ? in current phase (02-02 complete)
 Status: In progress
-Last activity: 2026-03-16 — Plan 02-01 executed; installed packages, created DB migration (pgvector, 4 tables, 2 functions), TypeScript types, 9 test stub files (22 todos); 63 tests pass, build clean
+Last activity: 2026-03-16 — Plan 02-02 executed (TDD); parseCsv implemented with papaparse+zod, 8 tests pass, TypeScript clean
 
 Progress: [███░░░░░░░] 25%
 
@@ -44,7 +44,7 @@ Progress: [███░░░░░░░] 25%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 5 | ~4.2hrs | ~50 min |
-| 02-data-pipeline | 1 | ~8 min | ~8 min |
+| 02-data-pipeline | 2 | ~13 min | ~6 min |
 
 **Recent Trend:**
 - Last 5 plans: 01-01 (~45min), 01-02 (~45min), 01-03 (~45min), 01-04 (~45min), 01-05 (~22min)
@@ -76,6 +76,9 @@ Recent decisions affecting current work:
 - [01-06]: Stable mock references in vi.mock factories — unstable object refs cause infinite re-render loops in component tests
 - [02-01]: Test stubs use it.todo() exclusively — no imports from production modules, ensuring suite passes before implementation exists
 - [02-01]: pgvector HNSW index uses vector_cosine_ops for cosine similarity in match_document_chunks function
+- [02-02]: zod coerce used for numeric fields so raw CSV strings auto-convert to numbers without pre-processing
+- [02-02]: Column-level errors returned for missing headers (not row-level) — clearer upload UI feedback
+- [02-02]: BOM and whitespace stripping done in papaparse transformHeader to keep zod schema clean
 
 ### Pending Todos
 
@@ -91,6 +94,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T11:35:00Z
-Stopped at: Completed 02-01-PLAN.md (foundation — packages, migration, types, test stubs)
-Resume file: .planning/phases/02-data-pipeline/02-01-SUMMARY.md
+Last session: 2026-03-16T12:34:00Z
+Stopped at: Completed 02-02-PLAN.md (CSV parser — parseCsv, ListingRowSchema, 8 tests)
+Resume file: .planning/phases/02-data-pipeline/02-02-SUMMARY.md
