@@ -2,10 +2,10 @@ import { getServerSupabase } from '@/lib/supabase/server'
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { client, tenantId } = getServerSupabase()
-  const { id } = params
+  const { id } = await params
 
   // Fetch upload to get storage_path for cleanup
   const { data: upload, error: fetchError } = await client
