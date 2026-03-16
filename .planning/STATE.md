@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: Completed 02-02-PLAN.md (CSV parser — parseCsv, ListingRowSchema, 8 tests)
-last_updated: "2026-03-16T12:34:00Z"
-last_activity: 2026-03-16 — Executed plan 02-02 (TDD); created parseCsv with papaparse+zod, 8 tests pass, TypeScript clean
+status: executing
+stopped_at: Completed 02-06-PLAN.md (Admin Portal UI — 9 TDD tests pass)
+last_updated: "2026-03-16T12:09:36.427Z"
+last_activity: 2026-03-16 — Plan 02-04 executed (TDD); POST /api/admin/upload implemented, 8 tests pass, TypeScript clean
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 14
+  completed_plans: 11
   percent: 25
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 ## Current Position
 
 Phase: 2 of 4 (Data Pipeline)
-Plan: 2 of ? in current phase (02-02 complete)
+Plan: 4 of ? in current phase (02-04 complete)
 Status: In progress
-Last activity: 2026-03-16 — Plan 02-02 executed (TDD); parseCsv implemented with papaparse+zod, 8 tests pass, TypeScript clean
+Last activity: 2026-03-16 — Plan 02-04 executed (TDD); POST /api/admin/upload implemented, 8 tests pass, TypeScript clean
 
 Progress: [███░░░░░░░] 25%
 
@@ -51,6 +51,7 @@ Progress: [███░░░░░░░] 25%
 - Trend: Steady; 01-05 faster due to clean codebase and clear patterns
 
 *Updated after each plan completion*
+| Phase 02 P06 | 8 | 1 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,10 @@ Recent decisions affecting current work:
 - [02-02]: zod coerce used for numeric fields so raw CSV strings auto-convert to numbers without pre-processing
 - [02-02]: Column-level errors returned for missing headers (not row-level) — clearer upload UI feedback
 - [02-02]: BOM and whitespace stripping done in papaparse transformHeader to keep zod schema clean
+- [02-04]: API route tests require @vitest-environment node — jsdom does not implement Request.formData() for File bodies (hangs indefinitely)
+- [02-04]: vi.hoisted() required for mock vars used in vi.mock factories to avoid temporal dead zone hoisting errors
+- [02-04]: Node native File.size getter cannot be overridden via Object.defineProperty — use plain mock objects for size-dependent tests
+- [Phase 02]: vi.useFakeTimers() in beforeEach blocks waitFor Promise resolution — removed global fake timers; polling test uses vi.spyOn(global.setInterval) with real timers
 
 ### Pending Todos
 
@@ -94,6 +99,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:34:00Z
-Stopped at: Completed 02-02-PLAN.md (CSV parser — parseCsv, ListingRowSchema, 8 tests)
-Resume file: .planning/phases/02-data-pipeline/02-02-SUMMARY.md
+Last session: 2026-03-16T12:08:55.348Z
+Stopped at: Completed 02-06-PLAN.md (Admin Portal UI — 9 TDD tests pass)
+Resume file: None
