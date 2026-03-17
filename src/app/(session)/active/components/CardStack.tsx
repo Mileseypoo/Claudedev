@@ -20,10 +20,7 @@ export function CardStack({ cards, onDismiss }: CardStackProps) {
   if (cards.length === 0) return null
 
   return (
-    <div
-      className="overflow-y-auto px-4 pb-2 flex-shrink-0"
-      style={{ maxHeight: '45vh' }}
-    >
+    <div className="overflow-y-auto px-4 pb-2">
       {cards.map((card) => (
         <AnswerCard key={card.id} card={card} onDismiss={onDismiss} />
       ))}

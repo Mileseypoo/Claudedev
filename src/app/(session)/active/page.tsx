@@ -123,8 +123,8 @@ function ActiveSessionContent() {
       />
 
       {/* Middle area: mic centred above cards, cards anchored to bottom */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className="flex-1 flex items-center justify-center min-h-[120px]">
           <div className="flex flex-col items-center gap-4">
             <MicIndicator isRecording={audio.isRecording} />
             <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
