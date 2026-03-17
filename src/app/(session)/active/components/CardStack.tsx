@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import type { AnswerCard as AnswerCardType } from '@/types/cards'
 import { AnswerCard } from './AnswerCard'
 
@@ -9,16 +10,24 @@ interface CardStackProps {
 }
 
 export function CardStack({ cards, onDismiss }: CardStackProps) {
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to newest card when cards change
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [cards.length])
+
   if (cards.length === 0) return null
 
   return (
     <div
-      className="flex flex-col justify-end overflow-y-auto px-4 pb-2"
-      style={{ maxHeight: '50vh' }}
+      className="overflow-y-auto px-4 pb-2 flex-shrink-0"
+      style={{ maxHeight: '45vh' }}
     >
       {cards.map((card) => (
         <AnswerCard key={card.id} card={card} onDismiss={onDismiss} />
       ))}
+      <div ref={bottomRef} />
     </div>
   )
 }

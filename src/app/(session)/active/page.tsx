@@ -122,14 +122,15 @@ function ActiveSessionContent() {
         onResume={handleResume}
       />
 
-      <CardStack cards={cards} onDismiss={dismissCard} />
-
-      {/* Center: mic indicator + timer */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <MicIndicator isRecording={audio.isRecording} />
-          <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
+      {/* Middle area: mic centred above cards, cards anchored to bottom */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <MicIndicator isRecording={audio.isRecording} />
+            <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
+          </div>
         </div>
+        <CardStack cards={cards} onDismiss={dismissCard} />
       </div>
 
       {/* Bottom: session controls */}
