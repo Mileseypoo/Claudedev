@@ -46,13 +46,20 @@ function SummaryContent() {
       setCards([])
       return
     }
-    fetch(`/api/session/cards?sessionId=${encodeURIComponent(sessionId)}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Fetch failed')
-        return res.json()
-      })
-      .then((json) => setCards(json.cards ?? []))
-      .catch(() => setCards([]))
+
+    const fetchCards = () =>
+      fetch(`/api/session/cards?sessionId=${encodeURIComponent(sessionId)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error('Fetch failed')
+          return res.json()
+        })
+        .then((json) => setCards(json.cards ?? []))
+        .catch(() => setCards([]))
+
+    // Fetch immediately, then again after 5s to catch cards fired just before session ended
+    fetchCards()
+    const timer = setTimeout(fetchCards, 5000)
+    return () => clearTimeout(timer)
   }, [sessionId])
 
   const loading = chunks === null

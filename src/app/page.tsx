@@ -33,6 +33,9 @@ export default function Home() {
         <p className="text-[var(--text-muted)] text-center">
           Sales Copilot
         </p>
+        <p className="text-[var(--text-muted)] text-xs text-center opacity-50">
+          v3.0.0
+        </p>
 
         <button
           className="w-full min-h-[56px] px-10 rounded-full bg-[var(--brand-color)] text-white text-lg font-semibold hover:opacity-90 active:opacity-80 transition-opacity"
