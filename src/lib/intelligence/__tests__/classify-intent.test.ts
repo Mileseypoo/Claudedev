@@ -7,7 +7,7 @@ const mockParse = vi.hoisted(() => vi.fn())
 vi.mock('@anthropic-ai/sdk', () => {
   // Must use regular function (not arrow) — arrow functions cannot be used as constructors
   const MockAnthropic = vi.fn(function (this: unknown) {
-    return { messages: { parse: mockParse } }
+    return { beta: { messages: { parse: mockParse } } }
   })
   return { default: MockAnthropic }
 })

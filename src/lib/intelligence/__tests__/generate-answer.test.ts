@@ -6,7 +6,7 @@ const mockParse = vi.hoisted(() => vi.fn())
 vi.mock('@anthropic-ai/sdk', () => {
   // Must use regular function (not arrow) — arrow functions cannot be used as constructors
   const MockAnthropic = vi.fn(function (this: unknown) {
-    return { messages: { parse: mockParse } }
+    return { beta: { messages: { parse: mockParse } } }
   })
   return { default: MockAnthropic }
 })
@@ -37,7 +37,7 @@ describe('generateAnswer', () => {
     expect(result).toHaveProperty('source_ref')
   })
 
-  it('calls client.messages.parse with max_tokens: 512', async () => {
+  it('calls client.beta.messages.parse with max_tokens: 512', async () => {
     await generateAnswer('Any question?', 'some context', 'rag')
     const callArgs = mockParse.mock.calls[0][0]
     expect(callArgs.max_tokens).toBe(512)

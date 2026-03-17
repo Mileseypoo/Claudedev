@@ -26,7 +26,7 @@ export async function generateAnswer(
   context: string,
   _cardType: CardType,
 ): Promise<GeneratedAnswer> {
-  const response = await client.messages.parse({
+  const response = await client.beta.messages.parse({
     model: 'claude-haiku-4-5',
     max_tokens: 512,
     system: SYSTEM_PROMPT,

@@ -45,7 +45,7 @@ export async function classifyIntent(
       ? `\n\nAlready answered topics (do NOT re-fire): ${existingTopicKeys.join(', ')}`
       : ''
 
-  const response = await client.messages.parse({
+  const response = await client.beta.messages.parse({
     model: 'claude-haiku-4-5',
     max_tokens: 256,
     system: SYSTEM_PROMPT,
