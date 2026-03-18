@@ -19,7 +19,9 @@ Generate two answers from the provided context:
 2. full_answer: 2–3 sentences with the key facts and relevant context for the agent to expand on verbally.
 3. source_ref: A URL or document name from the context. Empty string if none available.
 
-Base answers ONLY on the provided context. If context is insufficient, use "Checking..." as terse_answer and explain the gap in full_answer.`
+Base answers ONLY on the provided context.
+- If context shows no matching results (empty list, zero results), use "None available" as terse_answer and explain clearly in full_answer.
+- If context is genuinely missing or unclear, use "Checking..." as terse_answer and explain the gap in full_answer.`
 
 export async function generateAnswer(
   question: string,

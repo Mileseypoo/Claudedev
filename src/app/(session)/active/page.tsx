@@ -122,14 +122,16 @@ function ActiveSessionContent() {
         onResume={handleResume}
       />
 
-      {/* Middle area: mic centred above cards, cards anchored to bottom */}
-      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-        <div className="flex-1 flex items-center justify-center min-h-[120px]">
-          <div className="flex flex-col items-center gap-4">
+      {/* Middle area: relative container — mic centred, cards pinned to bottom */}
+      <div className="flex-1 relative overflow-hidden">
+        {/* Mic + timer always centred, pointer-events passthrough so cards remain tappable */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="flex flex-col items-center gap-4 pointer-events-auto">
             <MicIndicator isRecording={audio.isRecording} />
             <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
           </div>
         </div>
+        {/* Cards pinned to bottom of this container — cannot escape into controls */}
         <CardStack cards={cards} onDismiss={dismissCard} />
       </div>
 
