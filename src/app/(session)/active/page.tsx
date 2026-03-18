@@ -122,21 +122,19 @@ function ActiveSessionContent() {
         onResume={handleResume}
       />
 
-      {/* Middle area: relative container — mic centred, cards pinned to bottom */}
-      <div className="flex-1 relative overflow-hidden">
-        {/* Mic + timer always centred, pointer-events passthrough so cards remain tappable */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="flex flex-col items-center gap-4 pointer-events-auto">
-            <MicIndicator isRecording={audio.isRecording} />
-            <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
-          </div>
+      {/* Mic + timer: flex-1 so it shrinks when cards appear */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <MicIndicator isRecording={audio.isRecording} />
+          <SessionTimer elapsedSeconds={lifecycle.elapsedSeconds} />
         </div>
-        {/* Cards pinned to bottom of this container — cannot escape into controls */}
-        <CardStack cards={cards} onDismiss={dismissCard} />
       </div>
 
-      {/* Bottom: session controls */}
-      <div className="pb-8 px-6">
+      {/* Cards: hard cap at 40vh, scrollable, never pushes controls off screen */}
+      <CardStack cards={cards} onDismiss={dismissCard} />
+
+      {/* Bottom: session controls — flex-shrink-0 so they are always visible */}
+      <div className="pb-8 px-6 flex-shrink-0">
         <SessionControls
           onPause={handlePause}
           onResume={handleResume}
